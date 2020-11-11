@@ -22,3 +22,50 @@ function saveData() {
     const jsonData = JSON.stringify(user);
     fs.writeFileSync(filename, jsonData, 'utf-8');
 }
+
+
+
+app.get("/user", (req, res) => {
+    readData();
+    res.send(JSON.stringify(user));
+})
+
+app.get("/user/:id", (req, res) => {
+    const userid = req.params.id;
+    if (user.length == 0) {
+        readData();
+    }
+    let foundRec = user.find((e) => e.userId == userid);
+    if (foundRec == null)
+        throw "User not found";
+    res.send(JSON.stringify(foundRec))
+})
+
+app.put("/user", (req, res) => {
+    if (user.length == 0)
+        readData(); //Fill the array if it is not loaded....
+    let body = req.body;
+    //iterate thro the collection
+    for (let index = 0; index < user.length; index++) {
+        let element = user[index];
+        if (element.userId == body.userId) { //find the matching record
+            element.userName = body.userName;
+            element.userPhone = body.userPhone;
+            element.userEmail = body.userEmail;
+            element.userCity = body.userCity;
+            saveData();
+            res.send("User updated successfully");
+        }
+    }
+    //update the data
+    //exit the function....
+})
+
+app.post('/user', (req, res)=>{
+    if (user.length == 0)
+        readData();//Fill the array if it is not loaded....
+    let body = req.body;//parsed data from the POST...
+    user.push(body);  
+    saveData();//updating to the JSON file...
+    res.send("User added successfully");
+})
