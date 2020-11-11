@@ -69,3 +69,25 @@ app.post('/user', (req, res)=>{
     saveData();//updating to the JSON file...
     res.send("User added successfully");
 })
+
+app.delete("/user/:id", (req, res) => {
+    //throw "Do it UR Self!!!!";
+    const usrid = req.params.id;
+    if(user.length == 0){
+        readData();
+    }
+    let foundRec = user.find(u => u.userId == usrid);
+    if(foundRec == null)
+        throw "User not found";
+        for (let index = 0; index <user.length; index++) {
+          let element = user[index];
+          if (element.userId == usrid)
+          {user.splice(index, 1);
+              saveData();
+              res.send("User Deleted sucessfully");}
+          }
+})
+
+app.listen(1234, () => {
+    console.log("Server available at 1234");
+})
