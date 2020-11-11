@@ -38,3 +38,25 @@ let user = [];
 
 let jsonData = JSON.stringify(user);
 console.log(jsonData);
+
+
+
+function saveData(jsonData) {
+    const filename = "data.json";
+    fs.writeFileSync(filename, jsonData, 'utf-8');
+    console.log("Data is saved as JSON");    
+}
+//saveData(jsonData);
+function loadData() {
+    const filename = "data.json";
+    const data = fs.readFileSync(filename, "utf-8");
+    user = JSON.parse(data);
+}
+
+//Ph: 9945205684
+ 
+loadData();
+for (const usr of user) {
+    console.log(usr.userName);
+}
+
